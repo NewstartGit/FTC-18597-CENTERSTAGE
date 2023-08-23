@@ -134,17 +134,17 @@ public class AprilTagClass {
             if (detection.metadata != null) {
                 if (value.equalsIgnoreCase("Distance")) {
                     return detection.ftcPose.range;
-                } else {
-                    return 0;
                 }
-            }   // end for() loop
-
+                if(value.equalsIgnoreCase("Angle"))
+                {
+                    return detection.ftcPose.yaw;
+                }
+            }
+        }
             // Add "key" information to telemetry
             //telemetry.addLine("\nkey:\nXYZ = X (Right), Y (Forward), Z (Up) dist.");
             //telemetry.addLine("PRY = Pitch, Roll & Yaw (XYZ Rotation)");
             //telemetry.addLine("RBE = Range, Bearing & Elevation");
-        }
-
         return 0;
     }
 }

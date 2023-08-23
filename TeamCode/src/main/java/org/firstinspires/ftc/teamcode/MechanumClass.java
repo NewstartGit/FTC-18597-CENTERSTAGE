@@ -124,19 +124,53 @@ public class MechanumClass
         }
     }
 
-    /*
-    public void driveForward(double speed, long delay, int position) throws InterruptedException
+
+    public boolean driveForwardUntil(double speed,int position,AprilTagClass aTag) throws InterruptedException
     {
-        while(position > getEncoderVal("y")) {
+        double distance = aTag.returnAprilTagValues("Distance");
+        double angle = aTag.returnAprilTagValues("Angle");
+        if(distance > position)
+        {
             frontLeft.setPower(speed);
             frontRight.setPower(-speed);
             backLeft.setPower(-speed);
             backRight.setPower(speed);
+
+        }
+        else if(distance <= position)
+        {
+            frontLeft.setPower(0);
+            frontRight.setPower(0);
+            backLeft.setPower(0);
+            backRight.setPower(0);
+
+        }
+        if(angle > 0)
+        {
+            frontLeft.setPower(0);
+            frontRight.setPower(-speed*2);
+            backLeft.setPower(0);
+            backRight.setPower(speed*2);
+            return true;
+        }
+        else if(angle < 0)
+        {
+            frontLeft.setPower(speed*2);
+            frontRight.setPower(0);
+            backLeft.setPower(-speed*2);
+            backRight.setPower(0);
+            return true;
+        }
+        else
+        {
+            return false;
         }
 
 
-        //Thread.sleep(delay);
+        //frontRight.setPower(-speed);
+
+        //Thread.sleep(10000);
     }
 
-     */
+
 }

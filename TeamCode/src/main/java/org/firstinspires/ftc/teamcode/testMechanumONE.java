@@ -18,19 +18,32 @@ public class testMechanumONE extends LinearOpMode
 
         if(opModeIsActive())
         {
+            /*
             boolean waitForDistance = true;
+            double distance;
             while(waitForDistance)
             {
-                while(aTag.returnAprilTagValues("Distance") >= 20)
+                distance = aTag.returnAprilTagValues("Distance");
+                mc.drive(90, .5, 10000, 2000, true);
+                if(distance <= 20)
                 {
-                    mc.drive(0, .5, 2000, 2000, true);
+                    waitForDistance = false;
+                    mc.drive(0,0,0,0,false);
                 }
             }
-            mc.drive(0,.5,2000,2000,true);
+            mc.drive(90,.5,2000,2000,true);
             mc.drive(0,0,0,0,false);
 
+             */
+            boolean driveBool = true;
+            while(opModeIsActive())
+            {
+                if(driveBool)
+                {
+                    driveBool = mc.driveForwardUntil(.1,30,aTag);
+                }
 
-
+            }
             /*
             mc.drive(0,.5,2000,2000);
             mc.drive(90,.5,2000,2000);
