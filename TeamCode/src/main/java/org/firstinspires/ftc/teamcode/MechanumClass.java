@@ -124,6 +124,91 @@ public class MechanumClass
         }
     }
 
+    public boolean strafeAroundAprilTag(double speed, int distance, AprilTagClass aTag)
+    {
+        double tagDistance = aTag.returnAprilTagValues("Distance");
+        double angle = aTag.returnAprilTagValues("Angle");
+        double xDistance = aTag.returnAprilTagValues("X Value");
+
+        //Get angle and strafing down first, then distance
+        if(xDistance < 0) // Strafe right
+        {
+            frontLeft.setPower(speed);
+            frontRight.setPower(-speed);
+            backLeft.setPower(-speed);
+            backRight.setPower(speed);
+            return true;
+        }
+        else if(xDistance > 0) // Strafe left
+        {
+            frontLeft.setPower(-speed);
+            frontRight.setPower(speed);
+            backLeft.setPower(speed);
+            backRight.setPower(-speed);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+
+        /*
+        if(tagDistance > distance)
+        {
+            frontLeft.setPower(speed);
+            frontRight.setPower(-speed);
+            backLeft.setPower(-speed);
+            backRight.setPower(speed);
+            if(xDistance > 0) // Strafe right
+            {
+                frontLeft.setPower(speed);
+                frontRight.setPower(-speed);
+                backLeft.setPower(-speed);
+                backRight.setPower(speed);
+            }
+            else if(xDistance < 0) // Strafe left
+            {
+                frontLeft.setPower(-speed);
+                frontRight.setPower(speed);
+                backLeft.setPower(speed);
+                backRight.setPower(-speed);
+            }
+            else
+            {
+                return false;
+            }
+            if(angle > 0)
+            {
+                frontLeft.setPower(0);
+                frontRight.setPower(-speed*2);
+                backLeft.setPower(0);
+                backRight.setPower(speed*2);
+                return true;
+            }
+            else if(angle < 0)
+            {
+                frontLeft.setPower(speed*2);
+                frontRight.setPower(0);
+                backLeft.setPower(-speed*2);
+                backRight.setPower(0);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            frontLeft.setPower(0);
+            frontRight.setPower(0);
+            backLeft.setPower(0);
+            backRight.setPower(0);
+            return false;
+        }
+
+         */
+    }
 
     public boolean driveForwardUntil(double speed,int position,AprilTagClass aTag) throws InterruptedException
     {

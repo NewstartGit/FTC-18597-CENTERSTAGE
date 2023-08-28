@@ -139,6 +139,10 @@ public class AprilTagClass {
                 {
                     return detection.ftcPose.yaw;
                 }
+                if(value.equalsIgnoreCase("X Value"))
+                {
+                    return detection.ftcPose.x;
+                }
             }
         }
             // Add "key" information to telemetry

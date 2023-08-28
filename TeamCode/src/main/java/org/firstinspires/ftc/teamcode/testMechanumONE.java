@@ -38,11 +38,16 @@ public class testMechanumONE extends LinearOpMode
             boolean driveBool = true;
             while(opModeIsActive())
             {
+                /*
                 if(driveBool)
                 {
                     driveBool = mc.driveForwardUntil(.1,30,aTag);
                 }
-
+                */
+                if(driveBool)
+                {
+                    driveBool = mc.strafeAroundAprilTag(.1,40,aTag);
+                }
             }
             /*
             mc.drive(0,.5,2000,2000);
