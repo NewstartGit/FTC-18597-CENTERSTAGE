@@ -59,8 +59,8 @@ public class MechanumClass
     {
 
         frontLeft.setPower(-power * pivot + (power *(-vertical - horizontal)));
-        frontRight.setPower(power * pivot + (power *(-vertical + horizontal)));
-        backLeft.setPower(-power * pivot + (power *(-vertical + horizontal)));
+        frontRight.setPower(-power * pivot + (power *(-vertical + horizontal)));
+        backLeft.setPower(power * pivot + (power *(-vertical + horizontal)));
         backRight.setPower(power * pivot + (power * (-vertical - horizontal)));
     }
 
@@ -122,6 +122,37 @@ public class MechanumClass
             backLeft.setPower(0);
             backRight.setPower(0);
         }
+    }
+    //This is going to rotate x degrees, NOT TO x DEGREES
+    public void rotate(double degrees, double power, long delay, IMUClass imu) throws InterruptedException
+    {
+        frontRight.setDirection(DcMotor.Direction.FORWARD);
+        backRight.setDirection(DcMotor.Direction.REVERSE);
+        frontLeft.setDirection(DcMotor.Direction.FORWARD);
+        backLeft.setDirection(DcMotor.Direction.REVERSE);
+        imu.resetDegree();
+        double imuDegrees = imu.runIMU();
+
+        while(imuDegrees < degrees)
+        {
+            if(-degrees > 0)
+            {
+                frontLeft.setPower(power);
+                frontRight.setPower(-power);
+                backLeft.setPower(power);
+                backRight.setPower(-power);
+                imuDegrees = imu.runIMU();
+            }
+            else
+            {
+                frontLeft.setPower(-power);
+                frontRight.setPower(power);
+                backLeft.setPower(-power);
+                backRight.setPower(power);
+                imuDegrees = imu.runIMU();
+            }
+        }
+
     }
 
     public boolean strafeAroundAprilTag(double speed, int distance, AprilTagClass aTag)
