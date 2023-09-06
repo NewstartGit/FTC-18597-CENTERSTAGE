@@ -10,19 +10,17 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-public class MechanumClass
-{
+public class MechanumClass {
     DcMotor frontLeft;
     DcMotor frontRight;
     DcMotor backLeft;
     DcMotor backRight;
 
-    public double getEncoderVal(String encoder)
-    {
+    public double getEncoderVal(String encoder) {
         //0 = front left motor
         //1 = front right motor
         //3 =
-        switch(encoder) {
+        switch (encoder) {
             case "x1":
                 return -frontRight.getCurrentPosition();
             case "x2":
@@ -34,12 +32,11 @@ public class MechanumClass
         }
     }
 
-    public void init(HardwareMap hwMap, boolean autoMode)
-    {
-        frontLeft = hwMap.get(DcMotor.class,"FL_Motor");
-        frontRight = hwMap.get(DcMotor.class,"FR_Motor");
-        backLeft = hwMap.get(DcMotor.class,"BL_Motor");
-        backRight = hwMap.get(DcMotor.class,"BR_Motor");
+    public void init(HardwareMap hwMap, boolean autoMode) {
+        frontLeft = hwMap.get(DcMotor.class, "FL_Motor");
+        frontRight = hwMap.get(DcMotor.class, "FR_Motor");
+        backLeft = hwMap.get(DcMotor.class, "BL_Motor");
+        backRight = hwMap.get(DcMotor.class, "BR_Motor");
 
         frontRight.setDirection(DcMotor.Direction.REVERSE);
         backRight.setDirection(DcMotor.Direction.REVERSE);
@@ -55,21 +52,18 @@ public class MechanumClass
 
     }
 
-    public void teleOP(double power, double pivot, double vertical, double horizontal)
-    {
+    public void teleOP(double power, double pivot, double vertical, double horizontal) {
 
-        frontLeft.setPower(-power * pivot + (power *(-vertical - horizontal)));
-        frontRight.setPower(-power * pivot + (power *(-vertical + horizontal)));
-        backLeft.setPower(power * pivot + (power *(-vertical + horizontal)));
+        frontLeft.setPower(-power * pivot + (power * (-vertical - horizontal)));
+        frontRight.setPower(-power * pivot + (power * (-vertical + horizontal)));
+        backLeft.setPower(power * pivot + (power * (-vertical + horizontal)));
         backRight.setPower(power * pivot + (power * (-vertical - horizontal)));
     }
 
-    public void drive(double angle, double power, long delay, int position,boolean run) throws InterruptedException
-    {
-        if(run)
-        {
+    public void drive(double angle, double power, long delay, int position, boolean run) throws InterruptedException {
+        if (run) {
             // converts the degrees that is inputted to radians, adjusted to equal unit circle
-            double radAngle = Math.toRadians(-angle + 90);
+            double radAngle = Math.toRadians(angle);
             // calculate motor power
             double ADPower = power * Math.sqrt(2) * 0.5 * (Math.sin(radAngle) + Math.cos(radAngle));
             double BCPower = power * Math.sqrt(2) * 0.5 * (Math.sin(radAngle) - Math.cos(radAngle));
@@ -110,9 +104,7 @@ public class MechanumClass
             backRight.setPower(ADPower);
             // delay
             Thread.sleep(delay);
-        }
-        else
-        {
+        } else {
             frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -122,10 +114,14 @@ public class MechanumClass
             backLeft.setPower(0);
             backRight.setPower(0);
         }
+        frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
+
     //This is going to rotate x degrees, NOT TO x DEGREES
-    public void rotate(double degrees, double power, long delay, IMUClass imu) throws InterruptedException
-    {
+    public void rotate(double degrees, double power, long delay, IMUClass imu) throws InterruptedException {
         frontRight.setDirection(DcMotor.Direction.FORWARD);
         backRight.setDirection(DcMotor.Direction.REVERSE);
         frontLeft.setDirection(DcMotor.Direction.FORWARD);
@@ -133,18 +129,14 @@ public class MechanumClass
         imu.resetDegree();
         double imuDegrees = imu.runIMU();
 
-        while(imuDegrees < degrees)
-        {
-            if(-degrees > 0)
-            {
+        while (imuDegrees < degrees) {
+            if (-degrees > 0) {
                 frontLeft.setPower(power);
                 frontRight.setPower(-power);
                 backLeft.setPower(power);
                 backRight.setPower(-power);
                 imuDegrees = imu.runIMU();
-            }
-            else
-            {
+            } else {
                 frontLeft.setPower(-power);
                 frontRight.setPower(power);
                 backLeft.setPower(-power);
@@ -152,8 +144,50 @@ public class MechanumClass
                 imuDegrees = imu.runIMU();
             }
         }
-
+        while (imuDegrees > degrees) {
+            if (-degrees > 0) {
+                frontLeft.setPower(-power * .3);
+                frontRight.setPower(power * .3);
+                backLeft.setPower(-power * .3);
+                backRight.setPower(power * .3);
+                imuDegrees = imu.runIMU();
+            } else {
+                frontLeft.setPower(power * .3);
+                frontRight.setPower(-power * .3);
+                backLeft.setPower(power * .3);
+                backRight.setPower(-power * .3);
+                imuDegrees = imu.runIMU();
+            }
+        }
+        frontLeft.setPower(0);
+        frontRight.setPower(0);
+        backLeft.setPower(0);
+        backRight.setPower(0);
+        frontRight.setDirection(DcMotor.Direction.REVERSE);
+        backRight.setDirection(DcMotor.Direction.REVERSE);
+        frontLeft.setDirection(DcMotor.Direction.FORWARD);
+        backLeft.setDirection(DcMotor.Direction.FORWARD);
     }
+
+    public boolean alignWithAprilTag(double power, int distance, AprilTagClass aTag) {
+        frontRight.setDirection(DcMotor.Direction.FORWARD);
+        backRight.setDirection(DcMotor.Direction.REVERSE);
+        frontLeft.setDirection(DcMotor.Direction.FORWARD);
+        backLeft.setDirection(DcMotor.Direction.REVERSE);
+
+        double tagDistance = aTag.returnAprilTagValues("Distance");
+        double angle = aTag.returnAprilTagValues("Angle");
+        double xDistance = aTag.returnAprilTagValues("X Value");
+
+        if(tagDistance > distance) {
+            frontLeft.setPower(power);
+            frontRight.setPower(power);
+            backLeft.setPower(power);
+            backRight.setPower(power);
+        }
+        return false;
+    }
+
 
     public boolean strafeAroundAprilTag(double speed, int distance, AprilTagClass aTag)
     {
